@@ -223,12 +223,12 @@ function Dashboard() {
                     <div>{dailyForcast}</div>
                 </div>
 
-                <Button className='col-1 align-self-center mb-3' variant="outline-success" onClick={() => { loadDataMore(); setShow(true) }}>See More</Button>
+                <Button className='col-1 align-self-center mb-4' variant="outline-dark" onClick={() => { loadDataMore(); setShow(true) }}>See More</Button>
 
                 {/* load more forecasting details */}
                 <div className="">
                     <div>{loadDataMore()}</div>
-                    {show && <Button className='col-2 mb-3' variant="outline-success" onClick={() => setShow(false)}>Hide More Details</Button>}
+                    {show && <Button className='col-2 mb-5' variant="outline-dark" onClick={() => setShow(false)}>Hide More Details</Button>}
                 </div>
             </div>
         </div>
