@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, Alert } from 'react-bootstrap';
 
 function Dashboard() {
 
@@ -12,7 +12,7 @@ function Dashboard() {
 
     const [current, setCurrent] = useState({});
 
-    // const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
 
     const [lat, setLat] = useState("");
     const [long, setLong] = useState("");
@@ -53,7 +53,7 @@ function Dashboard() {
             })
             .catch(err => console.log(err));
 
-            
+
         // load data for next 7 days 
         axios.get("https://api.openweathermap.org/data/2.5/forecast/daily?lat=6.927079&lon=79.861244&cnt=7&appid=" + REACT_APP_API_KEY + "&units=metric")
             .then(res => {
@@ -86,27 +86,31 @@ function Dashboard() {
 
 
     // load More forcasting details
-    const loadDataMore = moreDetailArray.map((item, index) => {
+    const loadDataMore = () => moreDetailArray.map((item, index) => {
         return (
+
             <div className='d-inline-flex mb-5'>
-                <Card className='mx-auto ms-5 me-5 px-4 py-5' >
-                    <div key={index}>
-                        <h2>{Math.round(item.temp.day)} °C</h2>
-                        <p>{item.temp.min} °C - {item.temp.min} °C</p>
-                        <div>Humidity : {item.humidity} %</div>
-                        <div>Atm. pressure : {item.pressure} hPa</div>
-                        <div>Rain : {item.rain} mm</div>
-                        <div>Wind :  {item.speed} mps, {item.deg} deg</div>
-                        <div>Clouds : {item.clouds} %</div>
-                    </div>
-                </Card>
+                <Alert show={show} className='mx-2'>
+                    <Card className='mx-auto px-4' >
+                        <div key={index}>
+                            <h2>{Math.round(item.temp.day)} °C</h2>
+                            <p>{item.temp.min} °C - {item.temp.min} °C</p>
+                            <div>Humidity : {item.humidity} %</div>
+                            <div>Atm. pressure : {item.pressure} hPa</div>
+                            <div>Rain : {item.rain} mm</div>
+                            <div>Wind :  {item.speed} mps, {item.deg} deg</div>
+                            <div>Clouds : {item.clouds} %</div>
+                        </div>
+                    </Card>
+                </Alert>
             </div>
+
         );
     });
 
     // search details
     const search = () => {
-        axios.get("https://api.openweathermap.org/data/2.5/weather?lat=6.927079&lon=79.861244&appid=" + REACT_APP_API_KEY + "&units=metric")
+        axios.get("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + REACT_APP_API_KEY + "&units=metric")
             .then(res => {
                 setCurrent(
                     {
@@ -134,8 +138,7 @@ function Dashboard() {
             })
             .catch(err => console.log(err));
 
-        axios.get("https://api.openweathermap.org/data/2.5/forecast/daily?lat=6.927079&lon=79.861244&cnt=7&appid=" + REACT_APP_API_KEY + "&units=metric")
-        // axios.get("https://pro.openweathermap.org/data/2.5/forecast/climate?lat=35&lon=139&appid="+ REACT_APP_API_KEY)
+        axios.get("https://api.openweathermap.org/data/2.5/forecast/daily?lat=" + lat + "&lon=" + long + "&cnt=7&appid=" + REACT_APP_API_KEY + "&units=metric")
             .then(res => {
                 setDataList(res.data.list);
                 console.log(res.data.list);
@@ -172,7 +175,7 @@ function Dashboard() {
                                         value={lat}
                                         onChange={(event) => setLat(event.target.value)}
                                     />
-                                    <Button variant="outline-success">Search</Button>
+                                    <Button variant="outline-success" onClick={search}>Search</Button>
                                 </Form>
                             </div>
                             {/* <CardGroup> */}
@@ -206,23 +209,23 @@ function Dashboard() {
 
                             <hr className='col-11 mx-auto' />
 
-                            <div className="">
+                            <div>
                                 <div>{dailyForcast}</div>
                             </div>
-                            {/* <Alert show={}> */}
-                            <Button className='col-1 align-self-center mb-3' variant="outline-success" onClick={loadDataMore}>See More</Button>
+                            
+                            <Button className='col-1 align-self-center mb-3' variant="outline-success" onClick={() => { loadDataMore(); setShow(true) }}>See More</Button>
                             <div className="">
-                                <div>{loadDataMore}</div>
-                                <Button className='col-2 mb-3' variant="outline-success" onClick={loadDataMore}>Hide More Details</Button>
+
+                                <div>{loadDataMore()}</div>
+                                {show && <Button className='col-2 mb-3' variant="outline-success" onClick={() => setShow(false)}>Hide More Details</Button>}
+
                             </div>
-                            {/* </Alert> */}
-                            {/* </CardGroup> */}
                         </Card>
                     </Card>
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 }
 
