@@ -4,11 +4,12 @@ import { Card, Button, Form, Alert } from 'react-bootstrap';
 
 function Dashboard() {
 
+    const today = new Date();
+    const dates = [];
+
     const REACT_APP_API_KEY = "577ce7992e14740a1c2cbdfe52858eaf";
 
     var dateVariable = Date().toLocaleString();
-
-    // const currentDate = new Date().toLocaleDateString()+1;
 
     const [current, setCurrent] = useState({});
 
@@ -21,6 +22,12 @@ function Dashboard() {
 
     const slicedArray = dataList.slice(0, -4);
     const moreDetailArray = dataList.slice(3);
+
+    for (let i = 0; i < 7; i++) {
+        const nextDay = new Date(today);
+        nextDay.setDate(today.getDate() + i);
+        dates.push(nextDay);
+    }
 
     useEffect(() => {
 
@@ -67,17 +74,17 @@ function Dashboard() {
     // load first 3 days forcasting details
     const dailyForcast = slicedArray.map((item, index) => {
         return (
-            <div className='d-inline-flex mb-5'>
-                <Card className='mx-auto ms-5 me-5 px-4 py-5' >
+            <div className='d-inline-flex mb-5 '>
+                <Card className='mx-auto ms-5 me-5 px-4 pt-4' >
                     <div key={index}>
-                        {/* <p>{currentDate + 1}</p> */}
+                        <p className='font-monospace'>{dates[index].toLocaleDateString()}</p>
                         <h2>{Math.round(item.temp.day)} °C</h2>
-                        <p>{item.temp.min} °C - {item.temp.min} °C</p>
-                        <div>Humidity : {item.humidity} %</div>
-                        <div>Atm. pressure : {item.pressure} hPa</div>
-                        <div>Rain : {item.rain} mm </div>
-                        <div>Wind :  {item.speed} mps, {item.deg} deg</div>
-                        <div>Clouds : {item.clouds} %</div>
+                        <p className='small'>{item.temp.min} °C - {item.temp.min} °C</p>
+                        <h6 className='mt-4 fw-bold small'>Humidity : {item.humidity} %</h6>
+                        <h6 className='mt-3 fw-bold small'>Pressure : {item.pressure} hPa</h6>
+                        <h6 className='mt-3 fw-bold small '>Rain : {item.rain} mm </h6>
+                        <h6 className='mt-3 fw-bold small'>Wind :  {item.speed} mps, {item.deg} deg</h6>
+                        <h6 className='mt-3 mb-4 fw-bold small'>Clouds : {item.clouds} %</h6>
                     </div>
                 </Card>
             </div>
@@ -88,20 +95,20 @@ function Dashboard() {
     // load More forcasting details
     const loadDataMore = () => moreDetailArray.map((item, index) => {
         return (
+            <div className='d-inline-flex mb-5 mt-4'>
+                <Alert show={show} className='mx-auto ms-4 me-4 px-3 bg-light border-dark-subtle'>
 
-            <div className='d-inline-flex mb-5'>
-                <Alert show={show} className='mx-2'>
-                    <Card className='mx-auto px-4' >
-                        <div key={index}>
-                            <h2>{Math.round(item.temp.day)} °C</h2>
-                            <p>{item.temp.min} °C - {item.temp.min} °C</p>
-                            <div>Humidity : {item.humidity} %</div>
-                            <div>Atm. pressure : {item.pressure} hPa</div>
-                            <div>Rain : {item.rain} mm</div>
-                            <div>Wind :  {item.speed} mps, {item.deg} deg</div>
-                            <div>Clouds : {item.clouds} %</div>
-                        </div>
-                    </Card>
+                    <div key={index}>
+                        <p className='mt-4 font-monospace'>{dates[index + 3].toLocaleDateString()}</p>
+                        <h2>{Math.round(item.temp.day)} °C</h2>
+                        <p className='small'>{item.temp.min} °C - {item.temp.min} °C</p>
+                        <h6 className='mt-4 fw-bold small'>Humidity : {item.humidity} %</h6 >
+                        <h6 className='mt-3 fw-bold small'>Atm. pressure : {item.pressure} hPa</h6 >
+                        <h6 className='mt-3 fw-bold small'>Rain : {item.rain} mm</h6 >
+                        <h6 className='mt-3 fw-bold small'>Wind :  {item.speed} mps, {item.deg} deg</h6 >
+                        <h6 className='mt-3 fw-bold small'>Clouds : {item.clouds} %</h6 >
+                    </div>
+
                 </Alert>
             </div>
 
@@ -147,85 +154,84 @@ function Dashboard() {
     }
 
     return (
-        <div>
-            <div>
+        // heading
+        <div className='py-4 '
+            style={{
+                backgroundImage: "url(Images/white-cloud-blue-sky.jpg)",
+                backgroundSize: "cover",
+                backgroundpositionx: "inherit",
+            }}>
+            <div className='w-auto mx-5 mt-5 pt-2 mb-3 rounded-4 shadow' style={{ background: "#f8f4eebf" }}>
                 <div>
-                    <Card className='w-auto mx-5 my-5 bg-body-secondary' >
-                        <Card className='mx-3 mt-3 mb-4 shadow'>
-                            <div>
-                                <h2 className='mt-5'>Weather Forcast</h2>
-                                <p>{dateVariable}</p>
-                            </div>
+                    <h2 className='mt-5 fw-bold font-monospace '>Weather Forcast</h2>
+                    <p className='font-monospace'>{dateVariable}</p>
+                </div>
 
-                            <div className='mx-5 col-5 align-self-end'>
-                                <Form className="d-flex">
-                                    <Form.Control
-                                        type="search"
-                                        placeholder="Longitude"
-                                        className="me-2"
-                                        aria-label="Search"
-                                        value={long}
-                                        onChange={(event) => setLong(event.target.value)}
-                                    />
-                                    <Form.Control
-                                        type="search"
-                                        placeholder="Latitude"
-                                        className="me-2"
-                                        aria-label="Search"
-                                        value={lat}
-                                        onChange={(event) => setLat(event.target.value)}
-                                    />
-                                    <Button variant="outline-success" onClick={search}>Search</Button>
-                                </Form>
-                            </div>
-                            {/* <CardGroup> */}
+                <div className='mx-5 mx-auto col-5 '>
+                    <Form className="d-flex">
+                        <Form.Control
+                            type="search"
+                            placeholder="Longitude"
+                            className="me-2"
+                            aria-label="Search"
+                            value={long}
+                            onChange={(event) => setLong(event.target.value)}
+                        />
+                        <Form.Control
+                            type="search"
+                            placeholder="Latitude"
+                            className="me-2"
+                            aria-label="Search"
+                            value={lat}
+                            onChange={(event) => setLat(event.target.value)}
+                        />
+                        <Button variant="outline-dark" onClick={search}>Search</Button>
+                    </Form>
+                </div>
 
+                <hr className='col-11 mx-auto border-2' />
 
-                            <hr className='col-11 mx-auto' />
+                {/* current details desplay */}
+                <div className='row mb-4 mx-5' style={{ background: "#4755e629" }}>
+                    <div className='col-3 mt-4'>
+                        <h2 className='mb-4 font-monospace fw-bold'>{current.name}</h2>
+                        <img src={`http://openweathermap.org/img/w/${current.icons}.png`} alt="weather-icon" style={{ width: "100px" }} />
+                        <p className='text-center fst-italic ms-2'>{current.desc}</p>
+                    </div>
+                    <div className='col-9 mt-4 container text-center mt-2' >
+                        <h2 className='font-monospace fw-bolder'>{Math.round(current.celcius)} °C</h2>
+                        <p className='font-monospace'>{current.min} °C - {current.max} °C</p>
 
-                            <div className='row mb-4'>
-                                <div className='col-3 mt-4'>
-                                    <h2 className='mb-4 font-monospace'>{current.name}</h2>
-                                    <img src={`http://openweathermap.org/img/w/${current.icons}.png`} alt="weather-icon" style={{ width: "100px" }} />
-                                    <p className='text-center'>{current.desc}</p>
-                                </div>
-                                <div className='col-9 mt-4 container text-center mt-2'>
-                                    <h2>{Math.round(current.celcius)} °C</h2>
-                                    <p>{current.min} °C - {current.max} °C</p>
+                        <ul className='row mt-5 mx-3 fw-bold font-monospace' style={{ listStyleType: "none" }}>
+                            <li className='col '>Humidity  : {current.humidity} %</li>
+                            <li className='col'>Pressure  : {current.pressure} hPa</li>
+                            <li className='col'>Visibility  : {current.visibility} m</li>
+                        </ul>
 
-                                    <ul className='row mt-5 mx-3' style={{ listStyleType: "none" }}>
-                                        <li className='col'>Humidity : {current.humidity} %</li>
-                                        <li className='col'>Atm. pressure : {current.pressure} hPa</li>
-                                        <li className='col'>Visibility : {current.visibility} m</li>
-                                    </ul>
+                        <ul className='row mt-3 mx-3 fw-bold font-monospace' style={{ listStyleType: "none" }}>
+                            <li className='col'>Wind  :  {current.speed} mps, {current.deg} deg</li>
+                            <li className='col'>Clouds  : {current.cloud} %</li>
+                            <li className='col'>Rain  : {current.rain} mm/h</li>
+                        </ul>
+                    </div>
+                </div>
 
-                                    <ul className='row mt-3 mx-3' style={{ listStyleType: "none" }}>
-                                        <li className='col'>Wind :  {current.speed} mps, {current.deg} deg</li>
-                                        <li className='col'>Clouds : {current.cloud} %</li>
-                                        <li className='col'>Rain : {current.rain} mm/h</li>
-                                    </ul>
-                                </div>
-                            </div>
+                <hr className='col-11 mx-auto mt-2' />
 
-                            <hr className='col-11 mx-auto' />
+                {/* 3 days forecast */}
+                <div className='mt-4'>
+                    <div>{dailyForcast}</div>
+                </div>
 
-                            <div>
-                                <div>{dailyForcast}</div>
-                            </div>
-                            
-                            <Button className='col-1 align-self-center mb-3' variant="outline-success" onClick={() => { loadDataMore(); setShow(true) }}>See More</Button>
-                            <div className="">
+                <Button className='col-1 align-self-center mb-3' variant="outline-success" onClick={() => { loadDataMore(); setShow(true) }}>See More</Button>
 
-                                <div>{loadDataMore()}</div>
-                                {show && <Button className='col-2 mb-3' variant="outline-success" onClick={() => setShow(false)}>Hide More Details</Button>}
-
-                            </div>
-                        </Card>
-                    </Card>
+                {/* load more forecasting details */}
+                <div className="">
+                    <div>{loadDataMore()}</div>
+                    {show && <Button className='col-2 mb-3' variant="outline-success" onClick={() => setShow(false)}>Hide More Details</Button>}
                 </div>
             </div>
-
-        </div >
+        </div>
     );
 }
 
