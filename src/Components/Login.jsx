@@ -48,7 +48,7 @@ export default function Login() {
                                             value={email}
                                             onChange={(event) => setEmail(event.target.value)}
                                             />
-                                            <Form.Label>Email</Form.Label>
+                                            <Form.Label>User Name</Form.Label>
                                         </Form.Group>
 
                                         <Form.Group controlId="password" className="mt-4 mb-4">

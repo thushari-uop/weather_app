@@ -161,7 +161,7 @@ function Dashboard() {
                 backgroundSize: "cover",
                 backgroundpositionx: "inherit",
             }}>
-            <div className='w-auto mx-5 mt-5 pt-2 mb-3 rounded-4 shadow' style={{ background: "#f8f4eebf" }}>
+            <div className='w-auto mx-5 mt-5 pt-2 mb-3 rounded-4 shadow' style={{ background: "#rgb(248 244 238 / 30%)" }}>
                 <div>
                     <h2 className='mt-5 fw-bold font-monospace '>Weather Forcast</h2>
                     <p className='font-monospace'>{dateVariable}</p>
